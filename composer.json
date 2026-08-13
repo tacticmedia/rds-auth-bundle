@@ -1,0 +1,80 @@
+{
+    "name": "tacticmedia/rds-auth-bundle",
+    "description": "Symfony bundle for tacticmedia/rds-auth-middleware: Amazon RDS IAM token authentication and master-password refresh for Doctrine DBAL.",
+    "license": "MIT",
+    "type": "symfony-bundle",
+    "version": "1.0.0",
+    "keywords": [
+        "aws",
+        "rds",
+        "iam",
+        "doctrine",
+        "dbal",
+        "secrets-manager",
+        "symfony"
+    ],
+    "require": {
+        "php": ">=8.4",
+        "doctrine/doctrine-bundle": "^2.13 || ^3.0",
+        "symfony/config": "^7.4 || ^8.0",
+        "symfony/dependency-injection": "^7.4 || ^8.0",
+        "symfony/http-kernel": "^7.4 || ^8.0",
+        "tacticmedia/rds-auth-middleware": "dev-main"
+    },
+    "require-dev": {
+        "ext-pdo_sqlite": "*",
+        "ergebnis/composer-normalize": "^2.52",
+        "friendsofphp/php-cs-fixer": "^3.95.11",
+        "phpstan/phpstan": "^2.1.0",
+        "phpstan/phpstan-doctrine": "^2.0.27",
+        "phpstan/phpstan-symfony": "^2.0.20",
+        "phpunit/phpunit": "^13.3",
+        "rector/rector": "^2.5.2",
+        "roave/security-advisories": "dev-latest",
+        "symfony/framework-bundle": "^7.4 || ^8.0"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/tacticmedia/rds-auth-middleware"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "TacticMedia\\RdsAuthBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TacticMedia\\RdsAuthBundle\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "ergebnis/composer-normalize": true
+        },
+        "sort-packages": true
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "@composer-normalize-if-dev"
+        ],
+        "post-update-cmd": [
+            "@composer-normalize-if-dev"
+        ],
+        "composer-normalize-if-dev": [
+            "([ $COMPOSER_DEV_MODE -eq 0 ] || composer normalize)"
+        ],
+        "cs": "@php vendor/bin/php-cs-fixer fix",
+        "qa": [
+            "@rector",
+            "@cs",
+            "@stan",
+            "@test"
+        ],
+        "rector": "@php vendor/bin/rector",
+        "stan": "@php vendor/bin/phpstan analyse",
+        "test": "phpunit",
+        "test-coverage": "@php -d xdebug.mode=coverage vendor/bin/phpunit --coverage-html coverage/html --coverage-clover coverage/clover.xml"
+    }
+}
