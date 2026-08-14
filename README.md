@@ -1,5 +1,7 @@
 # RDS Authentication bundle
 
+[![codecov](https://codecov.io/gh/tacticmedia/rds-auth-bundle/graph/badge.svg?token=CIQ82XRGYU)](https://codecov.io/gh/tacticmedia/rds-auth-bundle)
+
 A Symfony bundle that registers and configures [`tacticmedia/rds-auth-middleware`](https://packagist.org/packages/tacticmedia/rds-auth-middleware), a Doctrine DBAL driver middleware that selects the database credential for an Amazon RDS instance at connect time:
 
 - If `iam_username` is set: connect as that user with an [RDS IAM authentication token](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html) as the password.
