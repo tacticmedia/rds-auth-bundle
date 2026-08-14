@@ -1,0 +1,13 @@
+{
+    "$schema": "https://context7.com/schema/context7.json",
+    "projectTitle": "RDS Auth Bundle",
+    "description": "Symfony bundle for Amazon RDS IAM token authentication and master-password refresh in Doctrine DBAL",
+    "folders": [],
+    "excludeFolders": ["src", "tests", "vendor", "coverage", ".github", ".devcontainer", ".idea"],
+    "excludeFiles": ["CLAUDE.md", "LICENSE"],
+    "rules": [
+        "Configure the bundle through environment variables: AWS_REGION, RDS_IAM_USERNAME, RDS_SECRET_ARN. A null or empty value disables the corresponding mode.",
+        "Keep the regular DoctrineBundle connection configuration. The bundle does not replace it.",
+        "Reuse database connections through FrankenPHP worker mode or RDS Proxy before you enable IAM authentication under a high connection rate."
+    ]
+}
