@@ -21,11 +21,18 @@ jobs:
             - uses: ramsey/composer-install@v3
               with:
                   dependency-versions: ${{ matrix.deps }}
-            - run: vendor/bin/phpunit --coverage-clover coverage/clover.xml
+            - run: vendor/bin/phpunit --coverage-clover coverage/clover.xml --log-junit junit.xml
             - run: vendor/bin/phpstan analyse --no-progress
             - uses: codecov/codecov-action@v7
               with:
                   token: ${{ secrets.CODECOV_TOKEN }}
                   files: coverage/clover.xml
+                  disable_search: true
+                  fail_ci_if_error: true
+            - uses: codecov/test-results-action@v1
+              if: ${{ !cancelled() }}
+              with:
+                  token: ${{ secrets.CODECOV_TOKEN }}
+                  files: junit.xml
                   disable_search: true
                   fail_ci_if_error: true
