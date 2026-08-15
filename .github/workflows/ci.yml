@@ -10,14 +10,22 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php: ['8.4', '8.5']
+                php: ['8.3', '8.4', '8.5']
+                symfony: ['6.4.*', '7.4.*', '8.*']
                 deps: [highest, lowest]
+                exclude:
+                    # Symfony 8 requires PHP >=8.4
+                    - php: '8.3'
+                      symfony: '8.*'
+        env:
+            SYMFONY_REQUIRE: ${{ matrix.symfony }}
         steps:
             - uses: actions/checkout@v5
             - uses: shivammathur/setup-php@v2
               with:
                   php-version: ${{ matrix.php }}
                   coverage: pcov
+                  tools: flex
             - uses: ramsey/composer-install@v3
               with:
                   dependency-versions: ${{ matrix.deps }}

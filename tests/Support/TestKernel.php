@@ -25,12 +25,12 @@ class TestKernel extends Kernel
 
     public function getCacheDir(): string
     {
-        return sys_get_temp_dir().'/rds-auth-bundle-tests/'.str_replace('\\', '_', static::class).'/cache';
+        return sys_get_temp_dir().'/rds-auth-bundle-tests/'.self::VERSION.'/'.str_replace('\\', '_', static::class).'/cache';
     }
 
     public function getLogDir(): string
     {
-        return sys_get_temp_dir().'/rds-auth-bundle-tests/'.str_replace('\\', '_', static::class).'/log';
+        return sys_get_temp_dir().'/rds-auth-bundle-tests/'.self::VERSION.'/'.str_replace('\\', '_', static::class).'/log';
     }
 
     protected function configureContainer(ContainerConfigurator $container): void

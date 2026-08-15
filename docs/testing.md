@@ -24,7 +24,7 @@ Each configuration variant needs its own kernel class in `tests/Support/`:
 - `ScopedTestKernel`: two connections, `connections: ['covered']`.
 - `NoCacheTestKernel`: `cache_pool: null`.
 
-Kernel cache directories are keyed by `static::class` under the system temp directory, so variants do not share a compiled container. A new configuration variant means a new `TestKernel` subclass that overrides `configureContainer()`.
+Kernel cache directories are keyed by `Kernel::VERSION` and `static::class` under the system temp directory, so variants do not share a compiled container and a dependency switch (for example `composer update --prefer-lowest`) does not reuse a container compiled by another Symfony version. A new configuration variant means a new `TestKernel` subclass that overrides `configureContainer()`.
 
 ## Gotchas
 
@@ -33,7 +33,7 @@ Kernel cache directories are keyed by `static::class` under the system temp dire
 
 ## CI
 
-`.github/workflows/ci.yml` runs PHPUnit and PHPStan on PHP 8.4 and 8.5 with highest and lowest dependencies, and uploads coverage and JUnit results to Codecov.
+`.github/workflows/ci.yml` runs PHPUnit and PHPStan on PHP 8.3, 8.4, and 8.5 crossed with Symfony 6.4, 7.4, and 8 (pinned through flex and `SYMFONY_REQUIRE`) and highest and lowest dependencies, and uploads coverage and JUnit results to Codecov. The PHP 8.3 with Symfony 8 pair is excluded because Symfony 8 requires PHP 8.4.
 
 ## The middleware dependency
 

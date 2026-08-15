@@ -22,30 +22,32 @@ final class RdsAuthBundle extends AbstractBundle
         $rootNode = $definition->rootNode();
         \assert($rootNode instanceof ArrayNodeDefinition);
 
-        $rootNode
-            ->children()
-            ->scalarNode('region')
+        $children = $rootNode->children();
+
+        $children->scalarNode('region')
             ->info('AWS region of the RDS endpoint and the secret.')
             ->cannotBeEmpty()
             ->defaultValue('%env(AWS_REGION)%')
-            ->end()
-            ->scalarNode('iam_username')
+        ;
+
+        $children->scalarNode('iam_username')
             ->info('Database user for RDS IAM token authentication. Null or empty disables IAM authentication.')
             ->defaultValue('%env(default::RDS_IAM_USERNAME)%')
-            ->end()
-            ->scalarNode('secret_arn')
+        ;
+
+        $children->scalarNode('secret_arn')
             ->info('ARN of the RDS-managed master-password secret. Null or empty disables the master-password refresh.')
             ->defaultValue('%env(default::RDS_SECRET_ARN)%')
-            ->end()
-            ->scalarNode('cache_pool')
+        ;
+
+        $children->scalarNode('cache_pool')
             ->info('Cache pool service id that stores accepted credentials. Null or empty disables caching.')
             ->defaultValue('cache.app')
-            ->end()
-            ->arrayNode('connections')
+        ;
+
+        $children->arrayNode('connections')
             ->info('DBAL connection names the middleware applies to. An empty list applies it to every connection.')
-            ->scalarPrototype()->end()
-            ->end()
-            ->end()
+            ->scalarPrototype()
         ;
     }
 

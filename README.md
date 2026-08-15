@@ -1,6 +1,6 @@
-# RDS Authentication bundle
+# Symfony RDS IAM authentication bundle
 
-[![codecov](https://codecov.io/gh/tacticmedia/rds-auth-bundle/graph/badge.svg?token=CIQ82XRGYU)](https://codecov.io/gh/tacticmedia/rds-auth-bundle)
+[![codecov](https://codecov.io/gh/tacticmedia/rds-auth-bundle/graph/badge.svg?token=CIQ82XRGYU)](https://github.com/tacticmedia/rds-auth-bundle)
 
 A Symfony bundle that registers and configures [`tacticmedia/rds-auth-middleware`](https://github.com/tacticmedia/rds-auth-middleware), a Doctrine DBAL driver middleware that selects the database credential for an Amazon RDS instance at connect time:
 

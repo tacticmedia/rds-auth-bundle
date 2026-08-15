@@ -2,9 +2,9 @@
 
 ## Requirements
 
-- PHP 8.4 or newer
-- Symfony 7.4 or 8.x
-- DoctrineBundle 2.13 or newer, or 3.x
+- PHP 8.3 or newer
+- Symfony 6.4, 7.4, or 8.x
+- DoctrineBundle 2.13 or newer, or 3.x (Symfony 8 needs DoctrineBundle 3.x, which needs PHP 8.4)
 
 ## Install with Composer
 
