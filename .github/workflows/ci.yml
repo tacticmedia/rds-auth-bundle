@@ -26,6 +26,7 @@ jobs:
                   php-version: ${{ matrix.php }}
                   coverage: pcov
                   tools: flex
+                  ini-values: zend.assertions=1
             - uses: ramsey/composer-install@v3
               with:
                   dependency-versions: ${{ matrix.deps }}

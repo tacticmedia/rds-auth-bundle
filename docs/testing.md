@@ -32,6 +32,7 @@ Kernel cache directories are keyed by `Kernel::VERSION` and `static::class` unde
 - Every test class calls `restore_exception_handler()` in `tearDown()`. The booted kernel registers an exception handler it does not remove, and `failOnRisky` is on.
 - `phpunit.xml.dist` sets `AWS_REGION` because the `region` default resolves `%env(AWS_REGION)%`.
 - Test classes must declare `#[CoversClass(RdsAuthBundle::class)]`. php-cs-fixer's `php_unit_test_class_requires_covers` rule adds `#[CoversNothing]` to a test class without covers metadata, and `CoversNothing` suppresses all coverage attribution: the suite passes while Codecov reports zero.
+- CI sets `ini-values: zend.assertions=1`. setup-php defaults to the production ini, which disables assertions, and pcov then reports each `assert()` call as an executable line with zero hits, so Codecov stays below 100%.
 
 ## CI
 
