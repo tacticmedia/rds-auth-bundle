@@ -1,8 +1,12 @@
 # Symfony RDS IAM authentication bundle
 
-[![codecov](https://codecov.io/gh/tacticmedia/rds-auth-bundle/graph/badge.svg?token=CIQ82XRGYU)](https://github.com/tacticmedia/rds-auth-bundle)
+[![codecov](https://codecov.io/gh/tacticmedia/rds-auth-bundle/graph/badge.svg?token=CIQ82XRGYU)](https://codecov.io/gh/tacticmedia/rds-auth-bundle)
 
-A Symfony bundle that registers and configures [`tacticmedia/rds-auth-middleware`](https://github.com/tacticmedia/rds-auth-middleware), a Doctrine DBAL driver middleware that selects the database credential for an Amazon RDS instance at connect time:
+**TL;DR**: A bundle you would install in your RDS-powered Symfony application to add seamless support for IAM authentication or managed, automatically rotated password to improve your baseline security posture. 
+
+[![codecov](https://codecov.io/gh/tacticmedia/rds-auth-middleware/graph/badge.svg?token=XZINN5HXOB)](middleware)
+
+A Symfony bundle that registers and configures [`tacticmedia/rds-auth-middleware`](https://github.com/tacticmedia/rds-auth-middleware), which selects the database credential for an Amazon RDS instance at connect time using the following logic:
 
 - If `iam_username` is set: connect as that user with an [RDS IAM authentication token](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html) as the password.
 - If `secret_arn` is set: connect with the configured password; when the database rejects it, re-read the current password from Secrets Manager and retry once.
