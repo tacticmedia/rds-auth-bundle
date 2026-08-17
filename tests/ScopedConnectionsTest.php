@@ -6,15 +6,17 @@ namespace TacticMedia\RdsAuthBundle\Tests;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use TacticMedia\RdsAuth\RdsAuthDriver;
+use TacticMedia\RdsAuthBundle\RdsAuthBundle;
 use TacticMedia\RdsAuthBundle\Tests\Support\ScopedTestKernel;
 
 /**
  * @internal
  */
-#[\PHPUnit\Framework\Attributes\CoversNothing]
+#[CoversClass(RdsAuthBundle::class)]
 final class ScopedConnectionsTest extends KernelTestCase
 {
     protected static function getKernelClass(): string

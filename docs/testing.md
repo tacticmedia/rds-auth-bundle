@@ -25,13 +25,13 @@ Each configuration variant needs its own kernel class in `tests/Support/`:
 - `NoCacheTestKernel`: `cache_pool: null`.
 - `NoEventDispatcherTestKernel`: `event_dispatcher: null`.
 
-Kernel cache directories are keyed by `Kernel::VERSION` and `static::class` under the system temp directory, so variants do not share a compiled container and a dependency switch (for example `composer update --prefer-lowest`) does not reuse a container compiled by another Symfony version. A new configuration variant means a new `TestKernel` subclass that overrides `configureContainer()`.
+Kernel cache directories are keyed by `Kernel::VERSION` and `static::class` under the system temp directory, so variants do not share a compiled container. `tests/bootstrap.php` deletes them before every run: the bundle's code runs only at container compile time, so a reused container would execute stale wiring and zero the coverage. A new configuration variant means a new `TestKernel` subclass that overrides `configureContainer()`.
 
 ## Gotchas
 
 - Every test class calls `restore_exception_handler()` in `tearDown()`. The booted kernel registers an exception handler it does not remove, and `failOnRisky` is on.
 - `phpunit.xml.dist` sets `AWS_REGION` because the `region` default resolves `%env(AWS_REGION)%`.
-- Tests boot with `debug => false`, so a compiled container survives a source change. After a wiring change, delete the `rds-auth-bundle-tests` directory under the system temp directory.
+- Test classes must declare `#[CoversClass(RdsAuthBundle::class)]`. php-cs-fixer's `php_unit_test_class_requires_covers` rule adds `#[CoversNothing]` to a test class without covers metadata, and `CoversNothing` suppresses all coverage attribution: the suite passes while Codecov reports zero.
 
 ## CI
 
