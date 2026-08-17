@@ -24,3 +24,13 @@ when@prod:
 ```
 
 With `RDS_IAM_USERNAME` set, `user` and `password` above are ignored at connect time. With `RDS_SECRET_ARN` set, `password` is the first attempt and Secrets Manager is the fallback. With neither set, the configuration above is used as written, so the same file serves local development and production.
+
+## Why parameters, not a DSN?
+
+**TL;DR**: AWS may generate a password containing special characters. This password will break your app.
+
+The examples use individual parameters instead of `url` / `DATABASE_URL` on purpose:
+
+- A password inside a DSN must be percent-encoded. An [RDS master password](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Limits.html) can contain any printable ASCII character except `/`, `'`, `"`, `@`, and space. `%`, `#`, and `?` are therefore legal, and each one breaks or silently corrupts a URL.
+- Secret-injection mechanisms such as an ECS task definition, Elastic Beanstalk `environmentsecrets`, or a Kubernetes secret inject the raw value and cannot encode it. 
+- With `secret_arn` set, a URL-corrupted password behaves like a rotated one: every uncached connect pays a failed attempt plus a Secrets Manager read instead of surfacing the misconfiguration.

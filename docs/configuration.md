@@ -63,9 +63,13 @@ doctrine:
         default_connection: default
         connections:
             default:
-                url: '%env(DATABASE_URL)%'
+                driver: pdo_pgsql
+                host: '%env(RDS_HOST)%'
+                dbname: app
             legacy:
-                url: '%env(LEGACY_DATABASE_URL)%'
+                driver: pdo_mysql
+                host: '%env(LEGACY_DB_HOST)%'
+                dbname: legacy
 ```
 
-Only the `default` connection gets the middleware; `legacy` keeps its plain driver.
+Only the `default` connection gets the middleware; `legacy` keeps its plain driver. [doctrine-dbal.md](doctrine-dbal.md) shows the full connection configuration and the reason the examples do not use a DSN.
