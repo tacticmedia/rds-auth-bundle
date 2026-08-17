@@ -31,6 +31,18 @@ See [Installation](docs/installation.md) for bundle registration.
 - [Bundle internals](docs/architecture.md) - services, middleware registration, package boundary
 - [Development and testing](docs/testing.md) - commands, kernel test pattern, CI
 
+## Contributions
+
+Non-LLM-slop contributions and issues are most definitely welcome. 
+
 ## License
 
 MIT. See [LICENSE](LICENSE).
+
+## One more thing
+
+This package is brought to you by [Tactic Media, a South Australian software development business](https://tacticmedia.com.au). 
+
+We love to help businesses become more efficient by automating tasks that shouldn't have been done by a human in the first place.
+
+Head over to our website to check out what we do, and if you think we can help you give your employees more time to spend on something more creative, [let's talk](https://tacticmedia.com.au/contact.html)
