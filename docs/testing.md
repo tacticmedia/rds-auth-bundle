@@ -34,7 +34,3 @@ Kernel cache directories are keyed by `Kernel::VERSION` and `static::class` unde
 ## CI
 
 `.github/workflows/ci.yml` runs PHPUnit and PHPStan on PHP 8.3, 8.4, and 8.5 crossed with Symfony 6.4, 7.4, and 8 (pinned through flex and `SYMFONY_REQUIRE`) and highest and lowest dependencies, and uploads coverage and JUnit results to Codecov. The PHP 8.3 with Symfony 8 pair is excluded because Symfony 8 requires PHP 8.4.
-
-## The middleware dependency
-
-Until `tacticmedia/rds-auth-middleware` is published on Packagist, `composer.json` resolves it from GitHub through a VCS repository. At publication, replace the `dev-main` constraint with a version constraint and remove the `repositories` entry.

@@ -3,7 +3,6 @@
     "description": "Symfony bundle for tacticmedia/rds-auth-middleware: Amazon RDS IAM token authentication and master-password refresh for Doctrine DBAL.",
     "license": "MIT",
     "type": "symfony-bundle",
-    "version": "1.0.0",
     "keywords": [
         "aws",
         "rds",
@@ -19,7 +18,7 @@
         "symfony/config": "^6.4 || ^7.4 || ^8.0",
         "symfony/dependency-injection": "^6.4 || ^7.4 || ^8.0",
         "symfony/http-kernel": "^6.4 || ^7.4 || ^8.0",
-        "tacticmedia/rds-auth-middleware": "dev-main"
+        "tacticmedia/rds-auth-middleware": "^1.0"
     },
     "require-dev": {
         "ext-pdo_sqlite": "*",
@@ -33,12 +32,6 @@
         "roave/security-advisories": "dev-latest",
         "symfony/framework-bundle": "^6.4 || ^7.4 || ^8.0"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/tacticmedia/rds-auth-middleware"
-        }
-    ],
     "autoload": {
         "psr-4": {
             "TacticMedia\\RdsAuthBundle\\": "src/"

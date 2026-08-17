@@ -4,7 +4,7 @@
 
 **TL;DR**: A bundle you would install in your RDS-powered Symfony application to add seamless support for IAM authentication or managed, automatically rotated password to improve your baseline security posture. 
 
-[![codecov](https://codecov.io/gh/tacticmedia/rds-auth-middleware/graph/badge.svg?token=XZINN5HXOB)](middleware)
+[![codecov](https://codecov.io/gh/tacticmedia/rds-auth-middleware/graph/badge.svg?token=XZINN5HXOB)](https://codecov.io/gh/tacticmedia/rds-auth-middleware)
 
 A Symfony bundle that registers and configures [`tacticmedia/rds-auth-middleware`](https://github.com/tacticmedia/rds-auth-middleware), which selects the database credential for an Amazon RDS instance at connect time using the following logic:
 
@@ -16,15 +16,11 @@ Every option defaults to an environment variable, so one application image runs 
 
 ## Installation
 
-The packages are on GitHub and not yet on Packagist, so the consuming project must declare both repositories:
-
 ```bash
-composer config repositories.rds-auth-bundle vcs https://github.com/tacticmedia/rds-auth-bundle
-composer config repositories.rds-auth-middleware vcs https://github.com/tacticmedia/rds-auth-middleware
-composer require tacticmedia/rds-auth-bundle:dev-main tacticmedia/rds-auth-middleware:dev-main
+composer require tacticmedia/rds-auth-bundle
 ```
 
-See [Installation](docs/installation.md) for the reasoning and for bundle registration without Flex.
+See [Installation](docs/installation.md) for bundle registration.
 
 ## Documentation
 
