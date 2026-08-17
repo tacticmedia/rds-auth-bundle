@@ -1,10 +1,14 @@
 # Symfony RDS IAM authentication bundle
 
+[![Packagist](https://img.shields.io/packagist/v/tacticmedia/rds-auth-bundle)](https://packagist.org/packages/tacticmedia/rds-auth-bundle)
+[![PHP](https://img.shields.io/packagist/dependency-v/tacticmedia/rds-auth-bundle/php)](https://packagist.org/packages/tacticmedia/rds-auth-bundle)
 [![codecov](https://codecov.io/gh/tacticmedia/rds-auth-bundle/graph/badge.svg?token=CIQ82XRGYU)](https://codecov.io/gh/tacticmedia/rds-auth-bundle)
+[![License](https://img.shields.io/packagist/l/tacticmedia/rds-auth-bundle)](LICENSE)
+
 
 **TL;DR**: A bundle you would install in your RDS-powered Symfony application to add seamless support for IAM authentication or managed, automatically rotated password to improve your baseline security posture. 
 
-[![codecov](https://codecov.io/gh/tacticmedia/rds-auth-middleware/graph/badge.svg?token=XZINN5HXOB)](https://codecov.io/gh/tacticmedia/rds-auth-middleware)
+---
 
 A Symfony bundle that registers and configures [`tacticmedia/rds-auth-middleware`](https://github.com/tacticmedia/rds-auth-middleware), which selects the database credential for an Amazon RDS instance at connect time using the following logic:
 
