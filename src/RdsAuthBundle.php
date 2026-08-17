@@ -45,13 +45,18 @@ final class RdsAuthBundle extends AbstractBundle
             ->defaultValue('cache.app')
         ;
 
+        $children->scalarNode('event_dispatcher')
+            ->info('Event dispatcher service id that receives the ConfiguredPasswordOutdated event. Null or empty disables the dispatch.')
+            ->defaultValue('event_dispatcher')
+        ;
+
         $children->arrayNode('connections')
             ->info('DBAL connection names the middleware applies to. An empty list applies it to every connection.')
             ->scalarPrototype()
         ;
     }
 
-    /** @param array{region: string, iam_username: ?string, secret_arn: ?string, cache_pool: ?string, connections: list<string>} $config */
+    /** @param array{region: string, iam_username: ?string, secret_arn: ?string, cache_pool: ?string, event_dispatcher: ?string, connections: list<string>} $config */
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
         $services = $container->services();
@@ -65,6 +70,7 @@ final class RdsAuthBundle extends AbstractBundle
         ;
 
         $pool = $config['cache_pool'];
+        $dispatcher = $config['event_dispatcher'];
 
         $middleware = $services->set('rds_auth.middleware', RdsAuthMiddleware::class)
             ->args([
@@ -73,6 +79,7 @@ final class RdsAuthBundle extends AbstractBundle
                 $config['iam_username'],
                 $config['secret_arn'],
                 null !== $pool && '' !== $pool ? service($pool) : null,
+                null !== $dispatcher && '' !== $dispatcher ? service($dispatcher) : null,
             ])
         ;
 

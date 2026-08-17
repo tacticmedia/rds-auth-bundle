@@ -23,6 +23,7 @@ Read the matching file before working on that area; do not load all of them:
 - `docs/architecture.md`: services, `doctrine.middleware` tag semantics, package boundary
 - `docs/configuration.md`: option reference, environment-variable defaults, mode selection, per-connection scoping
 - `docs/credential-cache.md`: cache pool behavior, APCu setup, token lifetime
+- `docs/password-outdated-event.md`: when ConfiguredPasswordOutdated fires, payload, listener registration
 - `docs/doctrine-dbal.md`: what the middleware changes in the DBAL parameters
 - `docs/installation.md`: Composer setup, bundle registration
 - `docs/testing.md`: full command list, kernel test pattern, test gotchas, CI matrix

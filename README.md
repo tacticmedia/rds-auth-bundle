@@ -9,7 +9,7 @@
 A Symfony bundle that registers and configures [`tacticmedia/rds-auth-middleware`](https://github.com/tacticmedia/rds-auth-middleware), which selects the database credential for an Amazon RDS instance at connect time using the following logic:
 
 - If `iam_username` is set: connect as that user with an [RDS IAM authentication token](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html) as the password.
-- If `secret_arn` is set: connect with the configured password; when the database rejects it, re-read the current password from Secrets Manager and retry once.
+- If `secret_arn` is set: connect with the configured password; when the database rejects it, re-read the current password from Secrets Manager, retry once, and dispatch a [`ConfiguredPasswordOutdated`](docs/password-outdated-event.md) event so the application can alert or redeploy.
 - Neither set: the connection parameters stay unchanged.
 
 Every option defaults to an environment variable, so one application image runs unchanged in every environment, with either authentication mode or none.
@@ -27,6 +27,7 @@ See [Installation](docs/installation.md) for bundle registration.
 - [Installation](docs/installation.md) - requirements, Composer setup, bundle registration
 - [Configuration](docs/configuration.md) - option reference, environment-variable defaults, examples for each mode
 - [The credential cache](docs/credential-cache.md) - cache pool behavior, APCu setup, token lifetime
+- [The ConfiguredPasswordOutdated event](docs/password-outdated-event.md) - firing conditions, payload, listener registration
 - [The Doctrine DBAL configuration](docs/doctrine-dbal.md) - what the middleware changes at connect time
 - [Bundle internals](docs/architecture.md) - services, middleware registration, package boundary
 - [Development and testing](docs/testing.md) - commands, kernel test pattern, CI

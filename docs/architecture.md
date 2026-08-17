@@ -11,7 +11,7 @@
 |---|---|---|
 | `rds_auth.token_provider` | `TacticMedia\RdsAuth\RdsIamTokenProvider` | `region` |
 | `rds_auth.password_provider` | `TacticMedia\RdsAuth\RdsSecretPasswordProvider` | `region` |
-| `rds_auth.middleware` | `TacticMedia\RdsAuth\RdsAuthMiddleware` | both providers, `iam_username`, `secret_arn`, the `cache_pool` service or null |
+| `rds_auth.middleware` | `TacticMedia\RdsAuth\RdsAuthMiddleware` | both providers, `iam_username`, `secret_arn`, the `cache_pool` service or null, the `event_dispatcher` service or null |
 
 ## Middleware registration
 

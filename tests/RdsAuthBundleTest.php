@@ -40,6 +40,18 @@ final class RdsAuthBundleTest extends KernelTestCase
         self::assertEquals(1, $connection->fetchOne('SELECT 1'));
     }
 
+    #[TestDox('Default configuration injects the framework event dispatcher into the driver')]
+    public function testInjectsTheEventDispatcher(): void
+    {
+        self::bootKernel(['debug' => false]);
+
+        $driver = $this->connection()->getDriver();
+        self::assertInstanceOf(RdsAuthDriver::class, $driver);
+
+        $dispatcher = new \ReflectionProperty(RdsAuthDriver::class, 'eventDispatcher');
+        self::assertSame(self::getContainer()->get('event_dispatcher'), $dispatcher->getValue($driver));
+    }
+
     private function connection(): Connection
     {
         $registry = self::getContainer()->get('doctrine');

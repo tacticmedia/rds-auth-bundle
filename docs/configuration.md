@@ -9,6 +9,7 @@ rds_auth:
     iam_username: '%env(default::RDS_IAM_USERNAME)%'   # null or empty disables IAM authentication
     secret_arn: '%env(default::RDS_SECRET_ARN)%'       # null or empty disables the master-password refresh
     cache_pool: cache.app                              # null disables caching
+    event_dispatcher: event_dispatcher                 # null disables the ConfiguredPasswordOutdated dispatch
     connections: []                                    # empty applies to every DBAL connection
 ```
 
@@ -18,6 +19,7 @@ rds_auth:
 | `iam_username` | `%env(default::RDS_IAM_USERNAME)%` | Database user for RDS IAM token authentication. Null or empty disables IAM authentication. |
 | `secret_arn` | `%env(default::RDS_SECRET_ARN)%` | ARN of the RDS-managed master-password secret. Null or empty disables the master-password refresh. |
 | `cache_pool` | `cache.app` | Cache pool service id that stores accepted credentials. Null or empty disables caching. |
+| `event_dispatcher` | `event_dispatcher` | Event dispatcher service id that receives the `ConfiguredPasswordOutdated` event. Null or empty disables the dispatch. |
 | `connections` | `[]` | DBAL connection names the middleware applies to. An empty list applies it to every connection. |
 
 The [`default::` environment variable processor](https://symfony.com/doc/current/configuration/env_var_processors.html) resolves an unset variable to null, and null disables the corresponding mode. One application image therefore serves every environment without a configuration change: set `RDS_IAM_USERNAME` in one environment, `RDS_SECRET_ARN` in another, neither on a developer machine.
@@ -39,7 +41,15 @@ RDS_IAM_USERNAME=app_user
 
 Prerequisites on the AWS side, per the [AWS documentation](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html):
 
-- The task or instance role must allow `rds-db:connect` on the database user resource.
+- The task or instance role must allow `rds-db:connect` on the database user resource. The resource ARN uses the DbiResourceId (cluster resource ID for Aurora), not the instance identifier:
+
+  ```json
+  {
+      "Effect": "Allow",
+      "Action": "rds-db:connect",
+      "Resource": "arn:aws:rds-db:ap-southeast-2:123456789012:dbuser:db-ABCDEFGHIJKL01234/app_user"
+  }
+  ```
 - The database user must have IAM authentication enabled. PostgreSQL: `GRANT rds_iam TO app_user`.
 
 ## Example: master-password refresh
@@ -50,6 +60,10 @@ RDS_SECRET_ARN=arn:aws:secretsmanager:ap-southeast-2:123456789012:secret:rds!clu
 ```
 
 The role needs only `secretsmanager:GetSecretValue` on that one secret ARN. This mode exists because [RDS rotates a managed master-password secret every seven days by default](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-secrets-manager.html), while most deployments resolve the password into an environment variable once, when the container or instance starts: Elastic Beanstalk `environmentsecrets`, an ECS task definition, a Kubernetes secret. From the rotation until the next deployment or restart, the injected password is wrong and every connect fails with `password authentication failed`. Reading the secret at connect time restores database access without a deployment.
+
+### The ConfiguredPasswordOutdated event
+
+When the database rejects the configured password and the Secrets Manager password works, the middleware dispatches `TacticMedia\RdsAuth\ConfiguredPasswordOutdated` on the `event_dispatcher` service. [password-outdated-event.md](password-outdated-event.md) covers the firing conditions, the payload, and listener registration.
 
 ## Example: limit the middleware to specific connections
 
