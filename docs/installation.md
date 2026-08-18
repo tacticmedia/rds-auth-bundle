@@ -23,4 +23,4 @@ return [
 ];
 ```
 
-The bundle works without a configuration file. Every option defaults to an environment variable. See [configuration.md](configuration.md).
+The bundle works without a configuration file: every option defaults to an environment variable, and with none set the middleware passes connection parameters through unchanged. To activate a credential mode, set `AWS_REGION` together with `RDS_IAM_USERNAME` or `RDS_SECRET_ARN`. See [configuration.md](configuration.md).

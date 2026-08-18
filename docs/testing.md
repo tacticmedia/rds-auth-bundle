@@ -24,15 +24,17 @@ Each configuration variant needs its own kernel class in `tests/Support/`:
 - `ScopedTestKernel`: two connections, `connections: ['covered']`.
 - `NoCacheTestKernel`: `cache_pool: null`.
 - `NoEventDispatcherTestKernel`: `event_dispatcher: null`.
+- `IamModeTestKernel`: `iam_username` set.
+- `AsyncAwsRegionTestKernel`: `iam_username` set plus `AsyncAwsBundle` with `async_aws.config.region`.
 
 Kernel cache directories are keyed by `Kernel::VERSION` and `static::class` under the system temp directory, so variants do not share a compiled container. `tests/bootstrap.php` deletes them before every run: the bundle's code runs only at container compile time, so a reused container would execute stale wiring and zero the coverage. A new configuration variant means a new `TestKernel` subclass that overrides `configureContainer()`.
 
 ## Gotchas
 
 - Every test class calls `restore_exception_handler()` in `tearDown()`. The booted kernel registers an exception handler it does not remove, and `failOnRisky` is on.
-- `phpunit.xml.dist` sets `AWS_REGION` because the `region` default resolves `%env(AWS_REGION)%`.
+- `phpunit.xml.dist` sets `AWS_REGION`. `MissingRegionTest` removes it from `$_ENV`, `$_SERVER`, and `putenv()` and restores it in `tearDown()`; environment variables resolve at run time, not compile time, so it reuses the compiled `TestKernel` container.
 - Test classes must declare `#[CoversClass(RdsAuthBundle::class)]`. php-cs-fixer's `php_unit_test_class_requires_covers` rule adds `#[CoversNothing]` to a test class without covers metadata, and `CoversNothing` suppresses all coverage attribution: the suite passes while Codecov reports zero.
-- CI sets `ini-values: zend.assertions=1`. setup-php defaults to the production ini, which disables assertions, and pcov then reports each `assert()` call as an executable line with zero hits, so Codecov stays below 100%.
+- CI sets `ini-values: zend.assertions=1`: setup-php defaults to the production ini, which disables assertions, and pcov then reports each `assert()` call as an executable line with zero hits.
 
 ## CI
 

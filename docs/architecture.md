@@ -1,9 +1,12 @@
 # Bundle internals
 
-`src/RdsAuthBundle.php` is the entire source. It extends `AbstractBundle`:
+`src/` holds two classes. `RdsAuthBundle` extends `AbstractBundle`:
 
 - `configure()` defines the configuration tree. See [configuration.md](configuration.md) for the options.
+- `prependExtension()` captures the global region from the raw `async_aws` extension configuration when the AsyncAws bundle is registered.
 - `loadExtension()` registers the services and tags the middleware.
+
+`RegionEnvVarProcessor` backs the `rds_region:` prefix in the region default: the named variable, then `AWS_DEFAULT_REGION`, then the captured AsyncAws region; with no source it throws an `EnvNotFoundException` that names the configuration options.
 
 ## Services
 
@@ -12,6 +15,9 @@
 | `rds_auth.token_provider` | `TacticMedia\RdsAuth\RdsIamTokenProvider` | `region` |
 | `rds_auth.password_provider` | `TacticMedia\RdsAuth\RdsSecretPasswordProvider` | `region` |
 | `rds_auth.middleware` | `TacticMedia\RdsAuth\RdsAuthMiddleware` | both providers, `iam_username`, `secret_arn`, the `cache_pool` service or null, the `event_dispatcher` service or null |
+| `rds_auth.region_env_processor` | `TacticMedia\RdsAuthBundle\RegionEnvVarProcessor` | the AsyncAws global region or null |
+
+Both providers are lazy services. Doctrine instantiates the middleware, and with it the provider arguments, when the connection service is created during cache warmup; the lazy proxy defers provider construction and the `%env(AWS_REGION)%` resolution inside it to the first credential request, so a deployment without the variable still warms its cache. On PHP 8.3 the proxy subclasses the provider class; the middleware keeps both classes non-final for this.
 
 ## Middleware registration
 

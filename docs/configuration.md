@@ -5,7 +5,7 @@ All options with their defaults. The bundle works with no configuration file at 
 ```yaml
 # config/packages/rds_auth.yaml
 rds_auth:
-    region: '%env(AWS_REGION)%'
+    region: '%env(rds_region:AWS_REGION)%'             # required for the IAM and master-password modes
     iam_username: '%env(default::RDS_IAM_USERNAME)%'   # null or empty disables IAM authentication
     secret_arn: '%env(default::RDS_SECRET_ARN)%'       # null or empty disables the master-password refresh
     cache_pool: cache.app                              # null disables caching
@@ -15,7 +15,7 @@ rds_auth:
 
 | Option | Default | Effect |
 |---|---|---|
-| `region` | `%env(AWS_REGION)%` | AWS region of the RDS endpoint and the secret. Must not be empty. |
+| `region` | `%env(rds_region:AWS_REGION)%` | AWS region of the RDS endpoint and the secret. Required when `iam_username` or `secret_arn` is set; see the resolution order below. |
 | `iam_username` | `%env(default::RDS_IAM_USERNAME)%` | Database user for RDS IAM token authentication. Null or empty disables IAM authentication. |
 | `secret_arn` | `%env(default::RDS_SECRET_ARN)%` | ARN of the RDS-managed master-password secret. Null or empty disables the master-password refresh. |
 | `cache_pool` | `cache.app` | Cache pool service id that stores accepted credentials. Null or empty disables caching. |
@@ -23,6 +23,15 @@ rds_auth:
 | `connections` | `[]` | DBAL connection names the middleware applies to. An empty list applies it to every connection. |
 
 The [`default::` environment variable processor](https://symfony.com/doc/current/configuration/env_var_processors.html) resolves an unset variable to null, and null disables the corresponding mode. One application image therefore serves every environment without a configuration change: set `RDS_IAM_USERNAME` in one environment, `RDS_SECRET_ARN` in another, neither on a developer machine.
+
+The credential providers are lazy services: the region is read at the first token or secret request, never during container warmup, so pass-through deployments do not need it. The region resolves in this order:
+
+1. An explicit `rds_auth.region` value.
+2. The `AWS_REGION` environment variable.
+3. The `AWS_DEFAULT_REGION` environment variable.
+4. The [AsyncAws bundle's](https://github.com/async-aws/symfony-bundle) global `async_aws.config.region`, when that bundle is installed. Per-client regions are ignored.
+
+Empty strings count as unset. When no source provides a region, the first connection in a credential mode fails with an exception that names these options.
 
 ## Credential selection at connect time
 

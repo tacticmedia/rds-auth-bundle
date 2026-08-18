@@ -17,6 +17,8 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 final class RdsAuthBundle extends AbstractBundle
 {
+    private ?string $asyncAwsRegion = null;
+
     public function configure(DefinitionConfigurator $definition): void
     {
         $rootNode = $definition->rootNode();
@@ -25,9 +27,9 @@ final class RdsAuthBundle extends AbstractBundle
         $children = $rootNode->children();
 
         $children->scalarNode('region')
-            ->info('AWS region of the RDS endpoint and the secret.')
+            ->info('AWS region of the RDS endpoint and the secret. Required when iam_username or secret_arn is set; the default falls back to AWS_DEFAULT_REGION, then to the AsyncAws bundle region.')
             ->cannotBeEmpty()
-            ->defaultValue('%env(AWS_REGION)%')
+            ->defaultValue('%env(rds_region:AWS_REGION)%')
         ;
 
         $children->scalarNode('iam_username')
@@ -56,17 +58,45 @@ final class RdsAuthBundle extends AbstractBundle
         ;
     }
 
+    public function prependExtension(ContainerConfigurator $container, ContainerBuilder $builder): void
+    {
+        if (!$builder->hasExtension('async_aws')) {
+            return;
+        }
+
+        foreach ($builder->getExtensionConfig('async_aws') as $config) {
+            $global = $config['config'] ?? null;
+
+            if (!\is_array($global)) {
+                continue;
+            }
+
+            $region = $global['region'] ?? null;
+
+            if (\is_string($region) && '' !== $region) {
+                $this->asyncAwsRegion = $region;
+            }
+        }
+    }
+
     /** @param array{region: string, iam_username: ?string, secret_arn: ?string, cache_pool: ?string, event_dispatcher: ?string, connections: list<string>} $config */
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
         $services = $container->services();
 
+        $services->set('rds_auth.region_env_processor', RegionEnvVarProcessor::class)
+            ->args([$this->asyncAwsRegion])
+            ->tag('container.env_var_processor')
+        ;
+
         $services->set('rds_auth.token_provider', RdsIamTokenProvider::class)
             ->args([$config['region']])
+            ->lazy()
         ;
 
         $services->set('rds_auth.password_provider', RdsSecretPasswordProvider::class)
             ->args([$config['region']])
+            ->lazy()
         ;
 
         $pool = $config['cache_pool'];

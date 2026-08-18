@@ -14,7 +14,7 @@ composer qa      # rector, cs, stan, test in sequence
 
 ## What this is
 
-A one-class Symfony bundle: `src/RdsAuthBundle.php` wires `tacticmedia/rds-auth-middleware` into the container. The middleware selects the database credential for an Amazon RDS instance at connect time. All credential logic lives in the middleware package; this repository holds only container wiring.
+A two-class Symfony bundle: `src/RdsAuthBundle.php` wires `tacticmedia/rds-auth-middleware` into the container, and `src/RegionEnvVarProcessor.php` resolves the AWS region with fallbacks and a helpful failure. The middleware selects the database credential for an Amazon RDS instance at connect time. All credential logic lives in the middleware package; this repository holds only container wiring.
 
 ## Documentation
 

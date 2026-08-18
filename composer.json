@@ -20,8 +20,12 @@
         "symfony/http-kernel": "^6.4 || ^7.4 || ^8.0",
         "tacticmedia/rds-auth-middleware": "^1.1"
     },
+    "suggest": {
+        "async-aws/async-aws-bundle": "Its async_aws.config.region serves as the region fallback when AWS_REGION is not set"
+    },
     "require-dev": {
         "ext-pdo_sqlite": "*",
+        "async-aws/async-aws-bundle": "^1.17",
         "ergebnis/composer-normalize": "^2.52",
         "friendsofphp/php-cs-fixer": "^3.95.11",
         "phpstan/phpstan": "^2.1.0",
