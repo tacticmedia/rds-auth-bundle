@@ -38,10 +38,11 @@ jobs:
                   files: coverage/clover.xml
                   disable_search: true
                   fail_ci_if_error: true
-            - uses: codecov/test-results-action@v1
+            - uses: codecov/codecov-action@v7
               if: ${{ !cancelled() }}
               with:
                   token: ${{ secrets.CODECOV_TOKEN }}
+                  report_type: test_results
                   files: junit.xml
                   disable_search: true
                   fail_ci_if_error: true
