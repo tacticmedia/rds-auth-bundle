@@ -14,10 +14,11 @@
 |---|---|---|
 | `rds_auth.token_provider` | `TacticMedia\RdsAuth\RdsIamTokenProvider` | `region` |
 | `rds_auth.password_provider` | `TacticMedia\RdsAuth\RdsSecretPasswordProvider` | `region` |
-| `rds_auth.middleware` | `TacticMedia\RdsAuth\RdsAuthMiddleware` | both providers, `iam_username`, `secret_arn`, the `cache_pool` service or null, the `event_dispatcher` service or null |
+| `rds_auth.cache_pool` | `Psr\Cache\CacheItemPoolInterface` proxy | the `cache_pool` service; registered only when `cache_pool` is set |
+| `rds_auth.middleware` | `TacticMedia\RdsAuth\RdsAuthMiddleware` | both providers, `iam_username`, `secret_arn`, `rds_auth.cache_pool` or null, the `event_dispatcher` service or null |
 | `rds_auth.region_env_processor` | `TacticMedia\RdsAuthBundle\RegionEnvVarProcessor` | the AsyncAws global region or null |
 
-Both providers are lazy services. Doctrine instantiates the middleware, and with it the provider arguments, when the connection service is created during cache warmup; the lazy proxy defers provider construction and the `%env(AWS_REGION)%` resolution inside it to the first credential request, so a deployment without the variable still warms its cache. On PHP 8.3 the proxy subclasses the provider class; the middleware keeps both classes non-final for this.
+Both providers and the cache pool are lazy services. Doctrine instantiates the middleware, and with it these arguments, when the connection service is created during cache warmup; the lazy proxy defers construction to the first credential request. A deployment without `AWS_REGION` therefore still warms its cache, and pass-through mode never constructs an APCu pool on a host without `ext-apcu`. On PHP 8.3 the provider proxies subclass the provider classes, which the middleware keeps non-final for this. The pool proxy implements only `CacheItemPoolInterface` and wraps the configured pool through the `current()` factory, the definition that `#[Autowire(lazy: true)]` produces.
 
 ## Middleware registration
 

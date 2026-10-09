@@ -26,6 +26,8 @@ Each configuration variant needs its own kernel class in `tests/Support/`:
 - `NoEventDispatcherTestKernel`: `event_dispatcher: null`.
 - `IamModeTestKernel`: `iam_username` set.
 - `AsyncAwsRegionTestKernel`: `iam_username` set plus `AsyncAwsBundle` with `async_aws.config.region`.
+- `ApcuMissingTestKernel`: `cache_pool` points at `UnsupportedApcuAdapter`, whose constructor throws the `CacheException` of a host without `ext-apcu`.
+- `ApcuMissingIamModeTestKernel`: the same pool plus `iam_username` set.
 
 Kernel cache directories are keyed by `Kernel::VERSION` and `static::class` under the system temp directory, so variants do not share a compiled container. `tests/bootstrap.php` deletes them before every run: the bundle's code runs only at container compile time, so a reused container would execute stale wiring and zero the coverage. A new configuration variant means a new `TestKernel` subclass that overrides `configureContainer()`.
 

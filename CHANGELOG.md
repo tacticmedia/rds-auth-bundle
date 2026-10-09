@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Pass-through mode no longer constructs the cache pool. An APCu pool on a host without `ext-apcu` threw `CacheException: APCu is not enabled.` when Doctrine built the connection, even with no `RDS_*` variable set. The bundle passes the pool as the lazy `rds_auth.cache_pool` proxy, and a credential mode constructs it at the first connect.
+
 ## [1.1.2] - 2026-08-18
 
 ### Added

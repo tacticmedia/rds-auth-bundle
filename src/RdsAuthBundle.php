@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TacticMedia\RdsAuthBundle;
 
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -100,7 +101,17 @@ final class RdsAuthBundle extends AbstractBundle
         ;
 
         $pool = $config['cache_pool'];
+        $hasPool = null !== $pool && '' !== $pool;
         $dispatcher = $config['event_dispatcher'];
+
+        // Pass-through never constructs the pool, so an APCu pool works on a host without ext-apcu there.
+        if ($hasPool) {
+            $services->set('rds_auth.cache_pool', CacheItemPoolInterface::class)
+                ->factory('current')
+                ->args([[service($pool)]])
+                ->lazy(CacheItemPoolInterface::class)
+            ;
+        }
 
         $middleware = $services->set('rds_auth.middleware', RdsAuthMiddleware::class)
             ->args([
@@ -108,7 +119,7 @@ final class RdsAuthBundle extends AbstractBundle
                 service('rds_auth.password_provider'),
                 $config['iam_username'],
                 $config['secret_arn'],
-                null !== $pool && '' !== $pool ? service($pool) : null,
+                $hasPool ? service('rds_auth.cache_pool') : null,
                 null !== $dispatcher && '' !== $dispatcher ? service($dispatcher) : null,
             ])
         ;
