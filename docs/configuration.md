@@ -18,7 +18,7 @@ rds_auth:
 | `region` | `%env(rds_region:AWS_REGION)%` | AWS region of the RDS endpoint and the secret. Required when `iam_username` or `secret_arn` is set; see the resolution order below. |
 | `iam_username` | `%env(default::RDS_IAM_USERNAME)%` | Database user for RDS IAM token authentication. Null or empty disables IAM authentication. |
 | `secret_arn` | `%env(default::RDS_SECRET_ARN)%` | ARN of the RDS-managed master-password secret. Null or empty disables the master-password refresh. |
-| `cache_pool` | `cache.app` | Cache pool service id that stores accepted credentials. Null or empty disables caching. |
+| `cache_pool` | `cache.app` | Cache pool service id that stores accepted credentials. Null or empty disables caching. [credential-cache.md](credential-cache.md#choosing-a-pool) compares the pools per deployment. |
 | `event_dispatcher` | `event_dispatcher` | Event dispatcher service id that receives the `ConfiguredPasswordOutdated` event. Null or empty disables the dispatch. |
 | `connections` | `[]` | DBAL connection names the middleware applies to. An empty list applies it to every connection. |
 
