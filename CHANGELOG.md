@@ -53,7 +53,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release. The bundle registers `tacticmedia/rds-auth-middleware` as a Doctrine DBAL middleware with the `region`, `iam_username`, `secret_arn`, `cache_pool`, and `connections` options.
 
-[1.2.0]: https://github.com/tacticmedia/rds-auth-bundle/compare/1.1.1...1.2.0
+[Unreleased]: https://github.com/tacticmedia/rds-auth-bundle/compare/1.1.2...HEAD
+[1.1.2]: https://github.com/tacticmedia/rds-auth-bundle/compare/1.1.1...1.1.2
 [1.1.1]: https://github.com/tacticmedia/rds-auth-bundle/compare/1.1.0...1.1.1
 [1.1.0]: https://github.com/tacticmedia/rds-auth-bundle/compare/1.0.1...1.1.0
 [1.0.1]: https://github.com/tacticmedia/rds-auth-bundle/compare/1.0.0...1.0.1
