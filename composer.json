@@ -15,10 +15,11 @@
     "require": {
         "php": ">=8.3",
         "doctrine/doctrine-bundle": "^2.13 || ^3.0",
+        "psr/cache": "^2.0 || ^3.0",
         "symfony/config": "^6.4 || ^7.4 || ^8.0",
-        "symfony/dependency-injection": "^6.4 || ^7.4 || ^8.0",
+        "symfony/dependency-injection": "^6.4.4 || ^7.4 || ^8.0",
         "symfony/http-kernel": "^6.4 || ^7.4 || ^8.0",
-        "tacticmedia/rds-auth-middleware": "^1.1"
+        "tacticmedia/rds-auth-middleware": "^1.2"
     },
     "suggest": {
         "async-aws/async-aws-bundle": "Its async_aws.config.region serves as the region fallback when AWS_REGION is not set"
@@ -34,7 +35,8 @@
         "phpunit/phpunit": "^12.5 || ^13.3",
         "rector/rector": "^2.5.2",
         "roave/security-advisories": "dev-latest",
-        "symfony/framework-bundle": "^6.4 || ^7.4 || ^8.0"
+        "symfony/framework-bundle": "^6.4 || ^7.4 || ^8.0",
+        "symfony/polyfill-uuid": "^1.13.1"
     },
     "autoload": {
         "psr-4": {
