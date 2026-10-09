@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Requires `tacticmedia/rds-auth-middleware` ^1.2, which caches the Secrets Manager password without a TTL and dispatches `ConfiguredPasswordOutdated` whenever the accepted secret password differs from the configured one. `psr/cache` is a direct requirement.
 - `docs/credential-cache.md` compares APCu, filesystem, and Redis pools per deployment, explains why a chain is not worth it, states what a cache miss costs in IMDS requests, Secrets Manager reads, and events, and describes the IAM authentication cost of one connection per PHP-FPM request. It also covers sites that share one php-fpm master, PDO persistent connections with tokens, and Sentry cache tracing.
+- `docs/password-outdated-event.md` describes the comparison rule and how often the event fires.
 
 ### Fixed
 

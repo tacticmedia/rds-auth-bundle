@@ -72,7 +72,7 @@ The role needs only `secretsmanager:GetSecretValue` on that one secret ARN. This
 
 ### The ConfiguredPasswordOutdated event
 
-When the database rejects the configured password and the Secrets Manager password works, the middleware dispatches `TacticMedia\RdsAuth\ConfiguredPasswordOutdated` on the `event_dispatcher` service. [password-outdated-event.md](password-outdated-event.md) covers the firing conditions, the payload, and listener registration.
+When the database rejects a password, the Secrets Manager password works, and it differs from the configured password, the middleware dispatches `TacticMedia\RdsAuth\ConfiguredPasswordOutdated` on the `event_dispatcher` service. [password-outdated-event.md](password-outdated-event.md) covers the firing conditions, the payload, and listener registration.
 
 ## Example: limit the middleware to specific connections
 
