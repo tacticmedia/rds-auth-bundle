@@ -32,7 +32,7 @@ See [Installation](docs/installation.md) for bundle registration.
 - [Configuration](docs/configuration.md) - option reference, environment-variable defaults, examples for each mode
 - [The credential cache](docs/credential-cache.md) - pool choice per deployment, credential lifetimes, cache-miss cost, IAM connection rate
 - [The ConfiguredPasswordOutdated event](docs/password-outdated-event.md) - firing conditions, payload, listener registration
-- [The Doctrine DBAL configuration](docs/doctrine-dbal.md) - what the middleware changes at connect time
+- [The Doctrine DBAL configuration](docs/doctrine-dbal.md) - what the middleware changes at connect time, DSN and .env quoting pitfalls
 - [Bundle internals](docs/architecture.md) - services, middleware registration, package boundary
 - [Development and testing](docs/testing.md) - commands, kernel test pattern, CI
 
